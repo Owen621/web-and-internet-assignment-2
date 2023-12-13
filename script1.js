@@ -1,3 +1,36 @@
+function setUp() {
+    for(let j=0; j<NUM_CELLS; j++) {
+        drawNewShape(j*CELL_WIDTH, j, imgArray);
+        clickedArray[j] = 0;
+    }
+    let imageToSelect = 1+Math.floor(Math.random()*3)
+    let valid = false;
+    while (!valid) {
+        for(let n=0; n<NUM_CELLS; n++) {
+            if (imgArray[n] == imageToSelect) {
+                valid = true;
+                break
+            }
+        }
+        if (!valid) {
+            imageToSelect = 1+Math.floor(Math.random()*3)
+        }
+    }
+    console.log(imageToSelect)
+    switch (imageToSelect) {
+        case 1:
+            document.getElementById("animal-to-guess").innerHTML = "Select all images of a snake";
+            break
+        case 2:
+            document.getElementById("animal-to-guess").innerHTML = "Select all images of a parrot";
+            break
+        case 3:
+            document.getElementById("animal-to-guess").innerHTML = "Select all images of a frog";
+            break
+    }
+    return imageToSelect;
+}
+
 function drawNewShape(x, count) {
     imgRef = 1+Math.floor(Math.random()*3);
 
@@ -27,8 +60,6 @@ function snake(x) {
     drawEllipse("rgb(0,255,0)", x+129, 107, 25, 17.5, Math.PI, 0, Math.PI);
     drawEllipse("rgb(0,255,0)", x+160, 90, 25, 17.5, 0, 0.6, Math.PI);
     drawEllipse("rgb(0,0,0)", x+50, 85, 6, 6, 0, 0, 2*Math.PI);
-
-
 }
 
 function parrot(x) {
@@ -85,7 +116,7 @@ function whichCell(x, y) {
     let cell = Math.floor(x / CELL_WIDTH); // returns 0, 1 or 2
     return cell;
 }
-function doSomething(evt) {
+function tickTheCell(evt) {
     let pos = getMouseXY(evt);
     let str = "x, y: " + pos.x + ", " + pos.y;
     let cell = whichCell(pos.x, pos.y);
@@ -97,18 +128,18 @@ function doSomething(evt) {
     }
     else {
         clickedArray[cell] = 1;
-        drawTick(cell);
+        drawTick("rgb(0,0,255)", (cell*200), 1, 3);
         
     }
 }
     
-function drawTick(cell) {
-    context.strokeStyle = "rgb(0,0,255)";
+function drawTick(aCol, x, scale, width) {
+    context.strokeStyle = aCol;
     context.beginPath();
-    context.moveTo((cell*200)+10,16);
-    context.lineTo((cell*200)+16,20);
-    context.lineTo((cell*200)+22,12);
-    context.lineWidth = 3;
+    context.moveTo(x+10*scale,16*scale);
+    context.lineTo(x+16*scale,20*scale);
+    context.lineTo(x+22*scale,12*scale);
+    context.lineWidth = width;
     context.stroke();  
 }
 
@@ -120,7 +151,7 @@ function removeTick(cell) {
     context.fill();
 }
 
-function checkIfCorrect() {
+function checkIfCorrect(imageToSelect) {
     for(let k=0; k<NUM_CELLS; k++) {
         if (clickedArray[k] == 1){
             if (imgArray[k] != imageToSelect) {
@@ -136,13 +167,46 @@ function checkIfCorrect() {
     return true
 }
 
+function removeShapes() {
+    for(let p=0; p<NUM_CELLS; p++) {
+        drawRect("rgb(255,255,255)",p*200,0,200,200)
+    }
+}
+
+function successCanvas() {
+    drawRect("rgb(255,255,255",0,0,1000,200);
+    drawTick("rgb(0,255,0)", 388, 7, 30);
+}
+
+function beenSubmitted() {
+    if (checkIfCorrect(imageToSelect)) {
+        console.log("Thats right")
+        verifyButton.removeEventListener("click", beenSubmitted);
+        canvas.removeEventListener("click", tickTheCell);
+        successCanvas();
+        document.getElementById("animal-to-guess").innerHTML = "";
+        document.getElementById("result").innerHTML = "SUCCESS";
+        document.getElementById("button1").innerHTML = "Check complete";
+    }
+    else {
+        console.log("Thats wrong")
+        remainingAttempts -=1;
+        if (remainingAttempts == 0) {
+            console.log("You have lost")
+        }
+        else {
+            removeShapes()
+            imageToSelect = setUp()
+        }
+    }
+}
+
 let remainingAttempts = 2;
 let canvas = document.getElementById("canvas1");
 let context = canvas.getContext("2d");
 let imgArray = new Array(5);
 let clickedArray = new Array(5);
-let imageToSelect = 1+Math.floor(Math.random()*3)
-
+let done = false;
 const CANVAS_WIDTH = canvas.width;
 const CANVAS_HEIGHT = canvas.height;
 const NUM_CELLS = 5;
@@ -158,13 +222,15 @@ for(let i=1; i<=NUM_CELLS; i++) {
 }
 context.stroke();
 
-for(let j=0; j<NUM_CELLS; j++) {
-    drawNewShape(j*CELL_WIDTH, j, imgArray);
-}
+let imageToSelect = setUp()
 
-canvas.addEventListener('click', doSomething);
+
+let verifyButton = document.getElementById("button1");
+let reinitializeButton = document.getElementById("button2");
+
+
+verifyButton.addEventListener("click", beenSubmitted);
+canvas.addEventListener("click", tickTheCell);
+reinitializeButton.addEventListener("click", function(){window.location.reload();});
+
 /*document.write( `<br><b>${imgArray}</b>`)*/
-
-
-
-
