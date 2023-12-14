@@ -6,12 +6,14 @@ body {
     background-color: rgb(78, 76, 76);
     display: flex;
     flex-direction: column;
+    /*Ensure footer stays at bottom */
     min-height: 100vh;
 }
 
 main {
     text-align: center;
     flex: 1;
+    padding-bottom: 50px;
 }
 
 header {
@@ -25,13 +27,20 @@ footer {
     padding: 0;
 }
 
-canvas {
+
+#canvas1 {
     background-color: white;
+    /* Used display: block to remove problems of inline element */
     display: block;
     margin: 0;
     padding: 0;
+    /* This is the actual width of the canvas on the page, although the actual 
+    images will still be based off the 1000px canvas width */
+    width: 80vw;
+    height: calc(var(--div-width)/5);
 }
 
+/* Used inline-block so same size as canvas */
 #canvas-container {
     display: inline-block;
     border: 10px solid gray;
@@ -47,6 +56,7 @@ canvas {
     display: inline-block;
   }
 
+/* Creates slight shadow around buttons when hovered */
 .button:hover {
     box-shadow: 0 10px 15px 0 rgba(0,0,0,0.25), 0 15px 45px 0 rgba(0,0,0,0.12);
 }
@@ -56,8 +66,12 @@ canvas {
 #button2 {
     background-color: red;
 }
-
 #buttons {
     padding-top: 100px;
     padding-bottom: 100px;
+}
+
+ul {
+    list-style-position: inside;
+    padding-left: 0;
 }

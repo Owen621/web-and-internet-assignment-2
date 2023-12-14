@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="author" content="Owen Freeman"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Web and Internet Technology Assignment 2 Website"/>
+        <link rel="stylesheet" href="styles.css">
+        
+    </head>
+
+    <body id="body-wrap">
+        <header>
+            <h1>OwenCAPTCHA</h1>
+        </header>
+        <main id="main">
+            <div id="intro">
+                <h2 id="result"></h2>
+                <p id="animal-to-guess"></p>
+                
+            </div>
+
+            <div id="canvas-container">
+                <canvas id="canvas1" width="1000px" height="200px"></canvas>
+            </div>
+            <div id="buttons">
+                <button class="button" id="button1">Verify</button>
+                <button class="button" id="button2">Reinitialise</button>
+            </div>
+
+            <div id="info-wrapper">
+                <h3><b>Info about this web page</b></h3>
+                <h4><b>How does it work</b></h4>
+                <ul>
+                    <li>This program is made using only HTML, CSS and Javascript</li>
+                    <li>It works using the built in Javascript canvas, and the images have been designed by me</li>
+                    <li>Event listeners have been written for the buttons and ticking the cells. This then calls the relevant functions</li>
+                    <li>The user gets two attempts at passing the CAPTCHA challenge (Although the Reinitialise button allows them to reset it)</li>
+                    <li>The program essentially works by using two arrays, one for the array of images to be displayed and one to track which images have been clicked</li>
+                    <li>In the image to be displayed array, a 1 represents a snake, 2 a parrot and 3 a frog</li>
+                    <li>For every attempt, these numbers are chosen randomly, alongside a further random number to signify the animal to be guessed</li>
+                    <li>In the other array, a 1 represents clicked, whereas a 0 represents not been clicked</li>
+                    <li>Index 0-4 represents cell 1-5</li>
+                    <li>If a new cell is clicked, a tick is drawn in that cell. If a clicked cell is clicked again, a white square is simply drawn over the tick</li>
+                    <li>Once the user has won or lost, the canvas is overwritten with a green tick or a red cross</li>
+                    <li>These arrays can be compared with the number that should have been ticked, and therefore the result can be calculated ie did the user succeed or fail</li>
+                </ul>
+                <h4><b>How is this design responsive</b></h4>
+                <ul>
+                    <li>The width and height of the canvas are set in HTML, however these are essentially "overwritten" if you like, with a different resolution, in css</li>
+                    <li>The width is then set to 80% of the entire page, and the height 20% of the width, in order to create 5 identical squares</li>
+                    <li>The images may appear very slightly blurred, and this is because the same 1000 pixels are being used on larger sized canvases</li>
+                    <li>However I can proudly say this approach scales perfectly</li>
+                    <li>Some slight alterations were required in the Javascript for working out which cell is being ticked but using console.log I was able to figure out how to do it</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer>
+            <p>Owen Freeman<br>2023<br>©</p>
+            <script src="script1.js"></script>
+        </footer>
+    </body>
+
+</html>
